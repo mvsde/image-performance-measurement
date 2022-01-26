@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "module": "es2022",
+    "moduleResolution": "Node",
+    "target": "ES2021"
+  }
+}

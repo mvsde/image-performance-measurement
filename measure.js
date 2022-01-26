@@ -48,7 +48,8 @@ async function measure () {
 
     await page.tracing.stop()
 
-    const { traceEvents } = JSON.parse(await fs.readFile(tracePath))
+    const traceFile = await fs.readFile(tracePath, { encoding: 'utf8' })
+    const { traceEvents } = JSON.parse(traceFile)
 
     const fileExtension = path.extname(image)
     const fileName = path.basename(image, fileExtension)
