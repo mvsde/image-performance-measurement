@@ -2,7 +2,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import puppeteer from 'puppeteer'
 
-const RERUNS = 3
+const RERUNS = 5
 
 const IMAGES_DIR = './images'
 const TRACES_DIR = './traces'

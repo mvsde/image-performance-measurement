@@ -22,8 +22,14 @@ Start server for index.html and image files:
 npx serve
 ```
 
-Run decoding measurement 3x for each image:
+Run decoding measurement 5x for each image:
 
 ```sh
 npm run measure
 ```
+
+## Sponsored by
+
+<a href="https://factorial.io/">
+  <img src="https://logo.factorial.io/color.svg" width="40" height="56" alt="Factorial">
+</a>
