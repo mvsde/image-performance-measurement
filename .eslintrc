@@ -1,0 +1,11 @@
+{
+  "root": true,
+  "extends": "standard",
+  "env": {
+    "node": true,
+    "browser": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2022
+  }
+}
