@@ -16,6 +16,12 @@ npm run images
 
 ## Measure
 
+Start server for index.html and image files:
+
+```sh
+npx serve
+```
+
 Run decoding measurement 3x for each image:
 
 ```sh

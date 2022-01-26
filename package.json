@@ -1,14 +1,12 @@
 {
   "scripts": {
     "images": "node images.js",
-    "server": "serve",
     "measure": "node measure.js"
   },
   "type": "module",
   "dependencies": {
     "@squoosh/lib": "^0.4.0",
-    "puppeteer": "^13.1.2",
-    "serve": "^13.0.2"
+    "puppeteer": "^13.1.2"
   },
   "devDependencies": {
     "eslint": "^8.7.0",
