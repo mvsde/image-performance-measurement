@@ -53,12 +53,9 @@ async function measure () {
 
     const fileExtension = path.extname(image)
     const fileName = path.basename(image, fileExtension)
+    const { dur: duration } = traceEvents.find(trace => trace.name === 'ImageDecodeTask')
 
-    traceEvents.forEach((trace) => {
-      if (trace.name === 'ImageDecodeTask') {
-        fs.appendFile(resultPath, `${fileName},${fileExtension},${trace.dur},${trace.dur / 1000}\n`)
-      }
-    })
+    fs.appendFile(resultPath, `${fileName},${fileExtension},${duration},${duration / 1000}\n`)
   }
 }
 
