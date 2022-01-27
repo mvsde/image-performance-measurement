@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import puppeteer from 'puppeteer'
+import server from './server.js'
 
 const RERUNS = 5
 
@@ -20,7 +21,8 @@ page.setViewport({
   height: 900
 })
 
-await page.goto('http://localhost:3000/')
+server.listen(8080)
+await page.goto('http://localhost:8080/')
 
 const resultPath = `${RESULTS_DIR}/${new Date().toISOString()}.csv`
 await fs.writeFile(resultPath, 'Filename,Type,Raw Time,Time (ms)\n')
@@ -64,3 +66,4 @@ for (let index = 0; index < RERUNS; index++) {
 }
 
 await browser.close()
+server.close()
