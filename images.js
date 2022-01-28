@@ -2,32 +2,17 @@ import { ImagePool } from '@squoosh/lib'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
-const INPUT_DIR = './input'
-const OUTPUT_DIR = './images'
+import {
+  INPUT_DIR,
+  IMAGES_DIR,
+  PREPROCESS_OPTIONS,
+  ENCODE_OPTIONS
+} from './config.js'
 
-const IMAGES = await fs.readdir(INPUT_DIR)
+const images = await fs.readdir(INPUT_DIR)
 const imagePool = new ImagePool()
 
-const PREPROCESS_OPTIONS = {
-  resize: {
-    enabled: true,
-    width: 1000
-  }
-}
-
-const ENCODE_OPTIONS = {
-  mozjpeg: {
-    quality: 80
-  },
-  webp: {
-    quality: 70
-  },
-  avif: {
-    cqLevel: 30
-  }
-}
-
-for (const name of IMAGES) {
+for (const name of images) {
   const image = imagePool.ingestImage(`${INPUT_DIR}/${name}`)
   await image.decoded
   await image.preprocess(PREPROCESS_OPTIONS)
@@ -35,7 +20,7 @@ for (const name of IMAGES) {
 
   for (const encodedImage of Object.values(image.encodedWith)) {
     const { extension, binary } = await encodedImage
-    const fileName = `${OUTPUT_DIR}/${path.basename(name, path.extname(name))}.${extension}`
+    const fileName = `${IMAGES_DIR}/${path.basename(name, path.extname(name))}.${extension}`
     await fs.writeFile(fileName, binary)
   }
 }
