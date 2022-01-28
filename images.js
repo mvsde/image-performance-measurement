@@ -17,10 +17,10 @@ const PREPROCESS_OPTIONS = {
 
 const ENCODE_OPTIONS = {
   mozjpeg: {
-    quality: 70
+    quality: 80
   },
   webp: {
-    quality: 68
+    quality: 70
   },
   avif: {
     cqLevel: 30
