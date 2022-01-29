@@ -1,4 +1,6 @@
-import { valuesToCSV } from '../lib/csv.js'
+import { addToAnalysis, writeAnalysis } from '../lib/analysis.js'
+import { writeDataHeader, writeDataRow } from '../lib/data.js'
+import { loadImageInBrowser } from '../lib/browser.js'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import puppeteer from 'puppeteer'
@@ -17,15 +19,11 @@ const images = await fs.readdir(IMAGES_DIR)
 await fs.mkdir(TRACES_DIR, { recursive: true })
 await fs.mkdir(RESULTS_DIR, { recursive: true })
 
-const resultPath = `${RESULTS_DIR}/${new Date().toISOString()}.csv`
-await fs.writeFile(resultPath, valuesToCSV(
-  'Name',
-  'Type',
-  'Size',
-  'Response Time',
-  'Decode Time',
-  'Paint Time'
-))
+const date = new Date().toISOString()
+const dataPath = `${RESULTS_DIR}/data-${date}.csv`
+const analysisPath = `${RESULTS_DIR}/analysis-${date}.csv`
+
+await writeDataHeader({ path: dataPath })
 
 server.listen(PORT)
 
@@ -39,29 +37,9 @@ await page.setViewport({ width: 1200, height: 1200 })
 await page.goto(`http://localhost:${PORT}/`)
 
 /**
- * Load image in browser context
- *
- * @param {string} url Image URL
- * @returns {Promise<void>}
- */
-function loadImageInBrowser (url) {
-  return new Promise((resolve) => {
-    const img = new Image()
-    img.src = url
-    img.decode().then(() => {
-      document.body.appendChild(img)
-
-      // Paint finishes after two frames.
-      requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
-    })
-  })
-}
-
-/**
  * Measure image performance
  *
  * @param {string} image Image name
- * @returns {Promise<void>}
  */
 async function measure (image) {
   const imagePath = `${IMAGES_DIR}/${image}`
@@ -70,29 +48,24 @@ async function measure (image) {
 
   await page.reload()
   await page.tracing.start({ path: tracePath })
-  await page.evaluate(loadImageInBrowser, imagePath)
+  await page.evaluate(loadImageInBrowser, { path: imagePath })
   await page.tracing.stop()
 
-  const fileExtension = path.extname(image)
-  const fileName = path.basename(image, fileExtension)
-  const { size: fileSize } = await fs.stat(imagePath)
+  const type = path.extname(image)
+  const name = path.basename(image, type)
+  const { size } = await fs.stat(imagePath)
 
   const traceFile = await fs.readFile(tracePath, { encoding: 'utf8' })
   const { traceEvents } = JSON.parse(traceFile)
 
-  const resourceStart = traceEvents.find(trace => trace.name === 'ResourceSendRequest').ts
-  const resourceFinish = traceEvents.find(trace => trace.name === 'ResourceFinish').ts
-  const decodeDuration = traceEvents.find(trace => trace.name === 'ImageDecodeTask').dur
-  const paintDuration = traceEvents.find(trace => trace.name === 'PaintImage').dur
+  const responseStart = traceEvents.find(trace => trace.name === 'ResourceSendRequest').ts
+  const responseFinish = traceEvents.find(trace => trace.name === 'ResourceFinish').ts
+  const responseTime = responseFinish - responseStart
+  const decodeTime = traceEvents.find(trace => trace.name === 'ImageDecodeTask').dur
+  const paintTime = traceEvents.find(trace => trace.name === 'PaintImage').dur
 
-  await fs.appendFile(resultPath, valuesToCSV(
-    fileName,
-    fileExtension,
-    fileSize,
-    resourceFinish - resourceStart,
-    decodeDuration,
-    paintDuration
-  ))
+  writeDataRow({ path: dataPath, name, type, size, responseTime, decodeTime, paintTime })
+  addToAnalysis({ type, size, responseTime, decodeTime, paintTime })
 }
 
 for (let index = 0; index < RERUNS; index++) {
@@ -103,3 +76,5 @@ for (let index = 0; index < RERUNS; index++) {
 
 await browser.close()
 server.close()
+
+writeAnalysis({ path: analysisPath })
