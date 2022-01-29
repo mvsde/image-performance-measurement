@@ -1,4 +1,8 @@
-# Image Decoding Performance
+# Image Performance Measurement
+
+## Requirements
+
+* [Node.js](https://nodejs.org/)
 
 ## Installation
 
@@ -16,7 +20,7 @@ npm run images
 
 ## Measure
 
-Run decoding measurement 5x for each image:
+Run performance measurement 5x for each image:
 
 ```sh
 npm run measure

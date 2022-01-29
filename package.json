@@ -1,9 +1,10 @@
 {
-  "scripts": {
-    "images": "node images.js",
-    "measure": "node measure.js"
-  },
+  "private": true,
   "type": "module",
+  "scripts": {
+    "images": "node scripts/images.js",
+    "measure": "node scripts/measure.js"
+  },
   "dependencies": {
     "@squoosh/lib": "^0.4.0",
     "puppeteer": "^13.1.2"

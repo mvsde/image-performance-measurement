@@ -7,7 +7,9 @@ import {
   IMAGES_DIR,
   PREPROCESS_OPTIONS,
   ENCODE_OPTIONS
-} from './config.js'
+} from '../config.js'
+
+await fs.mkdir(IMAGES_DIR, { recursive: true })
 
 const images = await fs.readdir(INPUT_DIR)
 const imagePool = new ImagePool()

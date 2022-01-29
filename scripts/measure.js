@@ -1,8 +1,8 @@
-import { valuesToCSV } from './lib/csv.js'
+import { valuesToCSV } from '../lib/csv.js'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import puppeteer from 'puppeteer'
-import server from './lib/server.js'
+import server from '../lib/server.js'
 
 import {
   PORT,
@@ -11,7 +11,7 @@ import {
   TRACES_DIR,
   RESULTS_DIR,
   NETWORK_CONDITIONS
-} from './config.js'
+} from '../config.js'
 
 const images = await fs.readdir(IMAGES_DIR)
 await fs.mkdir(TRACES_DIR, { recursive: true })
