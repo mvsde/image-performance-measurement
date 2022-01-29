@@ -12,9 +12,9 @@ import {
 await fs.mkdir(IMAGES_DIR, { recursive: true })
 
 const images = await fs.readdir(INPUT_DIR)
-const imagePool = new ImagePool()
 
 for (const name of images) {
+  const imagePool = new ImagePool()
   const image = imagePool.ingestImage(`${INPUT_DIR}/${name}`)
   await image.decoded
   await image.preprocess(PREPROCESS_OPTIONS)
@@ -25,6 +25,6 @@ for (const name of images) {
     const fileName = `${IMAGES_DIR}/${path.basename(name, path.extname(name))}.${extension}`
     await fs.writeFile(fileName, binary)
   }
-}
 
-imagePool.close()
+  await imagePool.close()
+}
