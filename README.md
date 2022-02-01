@@ -1,16 +1,23 @@
 # Image Performance Measurement
 
-## Requirements
+## Sample Data
+
+* [Slow device](https://gist.github.com/mvsde/babe7a3c07e0fb5f7b0529580216d357)
+* [Fast device](https://gist.github.com/mvsde/3e42f33723b0cfff296f01bedc0dea94)
+
+## Usage
+
+### Requirements
 
 * [Node.js](https://nodejs.org/)
 
-## Installation
+### Installation
 
 ```sh
 npm install
 ```
 
-## Preparation
+### Preparation
 
 Create resized images in various formats:
 
@@ -18,7 +25,7 @@ Create resized images in various formats:
 npm run images
 ```
 
-## Measure
+### Measure
 
 Run performance measurement 5x for each image:
 
