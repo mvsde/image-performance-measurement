@@ -1,5 +1,7 @@
 {
+  "name": "@mvsde/image-performance-measurement",
   "private": true,
+  "license": "Hippocratic-3.0",
   "type": "module",
   "scripts": {
     "images": "node scripts/images.js",
